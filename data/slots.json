@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "day": "Tuesday",
+        "date": "Sep 30",
+        "time": "2:00 PM",
+        "booked": true
+    },
+    {
+        "id": 2,
+        "day": "Wednesday",
+        "date": "Oct 1",
+        "time": "11:00 AM",
+        "booked": false
+    },
+    {
+        "id": 3,
+        "day": "Thursday",
+        "date": "Oct 2",
+        "time": "4:00 PM",
+        "booked": true
+    },
+    {
+        "id": 4,
+        "day": "Friday",
+        "date": "Oct 3",
+        "time": "10:00 AM",
+        "booked": false
+    },
+    {
+        "id": 5,
+        "day": "Monday",
+        "date": "Oct 6",
+        "time": "3:00 PM",
+        "booked": false
+    }
+]

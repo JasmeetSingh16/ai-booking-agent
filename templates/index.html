@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jaseir AI Booking Agent</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- LEFT: CHAT -->
+  <main class="chat-col">
+    <header class="agent-head">
+      <div class="orb orb-lg"></div>
+      <div class="agent-info">
+        <h1>Jaseir AI Booking Agent</h1>
+        <p class="online"><i></i>Online</p>
+      </div>
+      <div class="head-icons">
+        <button class="icon-btn" title="Jump to next open day" onclick="showToday()">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+        </button>
+        <button class="icon-btn" title="Clear chat" onclick="resetChat()">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </button>
+        <div class="menu-wrap">
+          <button class="icon-btn" title="More" onclick="toggleMenu(event)">
+            <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>
+          </button>
+          <div id="more-menu" class="menu" hidden>
+            <button onclick="menuAction('refresh')">Refresh slots</button>
+            <button onclick="menuAction('download')">Download chat</button>
+            <button onclick="menuAction('demo')">Request a demo</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="chat-area">
+      <div class="msg ai">
+        <div class="orb orb-sm"></div>
+        <div class="bubble">Hi there! 👋<br>I can help you schedule a consultation call.<br>Here are some available time slots:</div>
+      </div>
+      <div class="slots" id="slot-cards"></div>
+    </div>
+
+    <div class="input-row">
+      <button class="icon-btn" title="Attach">
+        <svg viewBox="0 0 24 24"><path d="M20 11l-8.5 8.5a5 5 0 0 1-7-7L13 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L14 7"/></svg>
+      </button>
+      <input id="user-input" placeholder="Ask me to book a meeting..." autocomplete="off">
+      <button class="send" onclick="sendMessage()" title="Send">
+        <svg viewBox="0 0 24 24"><path d="M21 3L3 10.5l7 3 3 7z"/><path d="M10 13.5L21 3"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- RIGHT: SIDEBAR -->
+  <aside class="side-col">
+    <section class="card">
+      <div class="row between"><h2>Select a Date</h2><span class="muted" id="month-label-top"></span></div>
+      <div class="cal-nav">
+        <button class="nav-btn" onclick="changeMonth(-1)" aria-label="Previous month">‹</button>
+        <strong id="month-label"></strong>
+        <button class="nav-btn" onclick="changeMonth(1)" aria-label="Next month">›</button>
+      </div>
+      <div class="calendar" id="calendar"></div>
+    </section>
+
+    <section class="slots-panel">
+      <div class="row between"><h2>Available Slots</h2><span class="sel-date" id="sel-date"></span></div>
+      <div id="slot-list"></div>
+    </section>
+
+    <section class="promo">
+      <div class="promo-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+      </div>
+      <div>
+        <h3>Schedule a free consultation</h3>
+        <p>Get expert advice and discuss your project requirements.</p>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<!-- FLOATING CTA -->
+<div id="lead-card">
+  <button class="close" onclick="closeLead()" aria-label="Close">×</button>
+  <h3>🤖 Like this AI Agent?</h3>
+  <p>Jaseir Technology builds AI booking, sales and support agents for businesses.</p>
+  <div id="lead-form" hidden>
+    <input id="lead-name" placeholder="Your name" autocomplete="name">
+    <input id="lead-email" type="email" placeholder="Your email" autocomplete="email">
+  </div>
+  <p id="lead-msg" class="lead-msg"></p>
+  <button id="demo-btn" class="demo-btn" onclick="requestDemo()">Request Demo</button>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
