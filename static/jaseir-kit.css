@@ -140,9 +140,7 @@ html.jk-scroll-lock body {
   position: absolute;
   inset: 0;
   z-index: -1;
-  /* Faint fill at the top so the logo's white background blends in;
-     scrolling adds the stronger fill, blur, border and shadow. */
-  opacity: 0.55;
+  opacity: 0;
   background: rgb(255 255 255 / 0.88);
   -webkit-backdrop-filter: saturate(1.5) blur(14px);
   backdrop-filter: saturate(1.5) blur(14px);
@@ -164,7 +162,6 @@ html.jk-scroll-lock body {
 }
 
 .jk-header--dark::before {
-  opacity: 0;
   background: rgb(7 10 19 / 0.9);
 }
 
@@ -201,10 +198,9 @@ html.jk-scroll-lock body {
   height: auto;
 }
 
-/* logo.webp has a white background; multiply blends it into light headers. */
-.jk-header:not(.jk-header--dark) .jk-logo img,
-.jk-mobile-top img {
-  mix-blend-mode: multiply;
+.jk-logo picture,
+.jk-mobile-top picture {
+  display: block;
 }
 
 .jk-brand-tag {
@@ -288,6 +284,37 @@ html.jk-scroll-lock body {
 
 .jk-header--dark .jk-nav-link.is-active::after {
   background: #a78bfa;
+}
+
+/* Top-level agent item (RAG AI): its accent dot and underline. */
+.jk-nav-agent {
+  gap: 7px;
+}
+
+.jk-nav-agent .jk-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--agent-accent);
+}
+
+.jk-nav-agent:hover {
+  color: var(--agent-accent);
+}
+
+.jk-nav-agent.is-active::after {
+  background: var(--agent-accent);
+}
+
+.jk-header--dark .jk-nav-agent .jk-dot {
+  background: var(--agent-accent-bright);
+}
+
+.jk-header--dark .jk-nav-agent:hover {
+  color: #fff;
+}
+
+.jk-header--dark .jk-nav-agent.is-active::after {
+  background: var(--agent-accent-bright);
 }
 
 .jk-chevron {
@@ -591,6 +618,12 @@ html.jk-scroll-lock body {
 
 .jk-mobile-agent {
   padding: 10px;
+}
+
+.jk-mobile-top {
+  margin: -8px 0 24px;
+  border: 1px solid var(--agent-accent-line);
+  background: var(--agent-accent-soft);
 }
 
 .jk-mobile-links {
