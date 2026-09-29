@@ -2,6 +2,8 @@
    and throws a SyntaxError that stops the whole script (this was your main bug). */
 
 const $ = id => document.getElementById(id);
+/* Relative API base: "/ai-booking-agent/" in production, "/" locally. */
+const API = "";
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const POOL = ["10:00 AM","11:00 AM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
@@ -22,7 +24,7 @@ const isAvail = d => !!firstFree(d);
 const parseDate = i => { const [y,m,dd] = i.split("-").map(Number); return new Date(y, m-1, dd); };
 
 async function loadSlots(){
-  try{ SLOTS = await (await fetch("/slots")).json(); }
+  try{ SLOTS = await (await fetch(API + "slots")).json(); }
   catch(e){ console.error(e); SLOTS = []; }
   if(selDate && !isAvail(selDate)) selDate = null;
   if(!selDate){ const s = SLOTS.find(x => !x.booked); if(s){ selDate = parseDate(s.iso); viewMonth = new Date(selDate.getFullYear(), selDate.getMonth(), 1); } }
@@ -112,10 +114,23 @@ function addAI(text, id){
     `<div class="msg ai" ${id ? `id="${id}"` : ""}><div class="orb orb-sm"></div><div class="bubble">${clean}</div></div>`);
   scrollDown();
 }
+const THINKING = ["Reading your message", "Checking open slots", "Writing a reply"];
+function addThinking(){
+  $("chat-area").insertAdjacentHTML("beforeend",
+    `<div class="msg ai" id="typing"><div class="orb orb-sm"></div>
+     <div class="bubble thinking" role="status">${THINKING.map((t,i) => `<span class="${i ? "" : "on"}">${t}</span>`).join("")}</div></div>`);
+  scrollDown();
+  let i = 0;
+  const timer = setInterval(() => {
+    const el = $("typing"); if(!el){ clearInterval(timer); return; }
+    const steps = el.querySelectorAll(".thinking span");
+    if(i < steps.length - 1){ steps[i].className = "done"; steps[++i].className = "on"; }
+  }, 900);
+}
 async function askBot(message){
-  addAI("Typing…", "typing");
+  addThinking();
   try{
-    const r = await fetch("/chat", {
+    const r = await fetch(API + "chat", {
       method:"POST", headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({ message, history: chatHistory })
     });
@@ -147,7 +162,7 @@ $("user-input").addEventListener("keydown", e => { if(e.key === "Enter"){ e.prev
 async function bookSlot(d, t){
   addUser(`Can you book ${WEEKDAYS[d.getDay()]} ${short(d)} at ${t}?`);
   try{
-    const r = await fetch("/book", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ iso: iso(d), time: t }) });
+    const r = await fetch(API + "book", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ iso: iso(d), time: t }) });
     const data = await r.json();
     if(!data.ok){ addAI(data.error || "That slot isn't available."); await loadSlots(); return; }
     const b = data.booking, msg = `Done! Your consultation call is booked for ${b.day}, ${b.date} at ${b.time}.`;
@@ -163,7 +178,7 @@ function showConfirm(b){
     <div class="msg ai"><div class="orb orb-sm"></div>
     <div class="confirm">
       <div class="top"><div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-        <div><h3>Booking Confirmed 🎉</h3><p>Your consultation call has been scheduled successfully.</p></div></div>
+        <div><h3>Booking confirmed</h3><p>Your consultation call has been scheduled successfully.</p></div></div>
       <div class="facts">
         <div class="fact"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg><div>Date<b>${full}</b></div></div>
         <div class="fact"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div>Time<b>${t}</b></div></div>
@@ -227,7 +242,7 @@ async function requestDemo(){
   if(!/^\S+@\S+\.\S+$/.test(email)){ note.textContent = "Please enter a valid email."; return; }
   btn.disabled = true;
   try{
-    const r = await fetch("/lead", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ name, email }) });
+    const r = await fetch(API + "lead", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ name, email }) });
     if(!r.ok) throw new Error();
     form.hidden = true; btn.hidden = true; note.textContent = "Thanks! We'll contact you shortly.";
     setTimeout(closeLead, 3500);
@@ -236,6 +251,22 @@ async function requestDemo(){
 // popup opens on every visit, a few seconds after the page loads
 const LEAD_DELAY_MS = 8000;
 setTimeout(showLead, LEAD_DELAY_MS);
+
+/* ---------- sample requests ("Try sample data") ---------- */
+const SAMPLES = [
+  "Can I book a call next Tuesday afternoon?",
+  "What times do you have free tomorrow morning?",
+  "I'd like a 30-minute consultation this week. What's the earliest slot?",
+];
+let sampleIdx = -1;
+const sampleBtn = $("sample-btn");
+if(sampleBtn) sampleBtn.addEventListener("click", () => {
+  sampleIdx = (sampleIdx + 1) % SAMPLES.length;
+  $("user-input").value = SAMPLES[sampleIdx];
+  sampleBtn.querySelector("span").textContent = "Try another sample";
+  $("user-input").scrollIntoView({ block: "center" });
+  sendMessage();
+});
 
 /* ---------- init ---------- */
 loadSlots();
