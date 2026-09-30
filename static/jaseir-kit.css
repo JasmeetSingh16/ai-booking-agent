@@ -1878,3 +1878,141 @@ html.jk-scroll-lock body {
     animation: none;
   }
 }
+
+/* ---------------- Report gate (components/agent/ReportGate.tsx) ---------------- */
+
+.jk-gate {
+  position: relative;
+  display: grid;
+  margin-top: 16px;
+  isolation: isolate;
+}
+
+/* The locked report and the form share one grid cell, so the section is
+   as tall as whichever is taller. */
+.jk-gate-locked,
+.jk-gate-panel {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/* filter/mask make this a stacking context, so it must sit below the form. */
+.jk-gate-locked {
+  position: relative;
+  z-index: 0;
+  max-height: 720px;
+  overflow: hidden;
+  filter: blur(7px);
+  opacity: 0.75;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+}
+
+.jk-gate-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 0 24px;
+}
+
+.jk-gate-card {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 26px 22px;
+  border: 1px solid var(--jk-line);
+  border-radius: var(--jk-radius-lg);
+  background: var(--jk-surface);
+  box-shadow: var(--jk-shadow-lg);
+}
+
+@media (min-width: 768px) {
+  .jk-gate-card {
+    padding: 32px;
+  }
+}
+
+.jk-gate-icon {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--agent-accent-soft);
+  color: var(--agent-accent-ink);
+}
+
+.jk-gate-title {
+  margin: 14px 0 0;
+  color: var(--jk-ink);
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.jk-gate-form {
+  display: grid;
+  margin-top: 18px;
+  gap: 14px;
+}
+
+.jk-gate-form .jk-fineprint a {
+  color: var(--agent-accent-ink);
+  text-decoration: underline;
+}
+
+.jk-gate-field-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.jk-gate-status {
+  margin: 12px 0 0;
+  color: var(--jk-muted);
+  font-size: 15px;
+}
+
+.jk-gate-hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Booking CTA after an unlocked report */
+.jk-report-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 24px;
+  padding: 26px 22px;
+  gap: 16px;
+  border: 1px solid var(--agent-accent-line);
+  border-radius: var(--jk-radius-lg);
+  background: var(--agent-accent-soft);
+}
+
+@media (min-width: 768px) {
+  .jk-report-cta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 32px;
+  }
+}
+
+.jk-report-cta-title {
+  margin: 0;
+  color: var(--jk-ink);
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
