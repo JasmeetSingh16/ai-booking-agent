@@ -2073,3 +2073,10 @@ html.jk-scroll-lock body {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.jk-google-return {
+  margin-bottom: 16px;
+  color: var(--jk-ink);
+  font-weight: 600;
+  text-align: center;
+}
