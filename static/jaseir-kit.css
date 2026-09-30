@@ -1922,7 +1922,8 @@ html.jk-scroll-lock body {
 .jk-gate-card {
   position: relative;
   width: min(100%, 440px);
-  padding: 26px 22px;
+  min-width: 0;
+  padding: 24px 18px;
   border: 1px solid var(--jk-line);
   border-radius: var(--jk-radius-lg);
   background: var(--jk-surface);
@@ -1958,6 +1959,22 @@ html.jk-scroll-lock body {
   display: grid;
   margin-top: 18px;
   gap: 14px;
+}
+
+/* Let the buttons wrap on very narrow screens instead of overflowing the card. */
+.jk-gate-form .jk-btn,
+.jk-report-cta .jk-btn {
+  height: auto;
+  min-height: 52px;
+  max-width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  white-space: normal;
+  text-align: center;
+}
+
+.jk-gate-form .jk-fineprint {
+  overflow-wrap: anywhere;
 }
 
 .jk-gate-form .jk-fineprint a {
