@@ -2056,3 +2056,20 @@ html.jk-scroll-lock body {
   letter-spacing: -0.02em;
   line-height: 1.3;
 }
+
+.jk-report-who {
+  margin: 12px 0 0;
+  color: var(--jk-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.jk-report-who button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--agent-accent-ink);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
