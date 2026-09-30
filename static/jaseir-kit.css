@@ -1982,6 +1982,29 @@ html.jk-scroll-lock body {
   text-decoration: underline;
 }
 
+.jk-gate-google {
+  display: flex;
+  min-height: 44px;
+  justify-content: center;
+}
+
+.jk-gate-or {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  gap: 12px;
+  color: var(--jk-muted);
+  font-size: 13px;
+}
+
+.jk-gate-or::before,
+.jk-gate-or::after {
+  flex: 1;
+  height: 1px;
+  background: var(--jk-line);
+  content: "";
+}
+
 .jk-gate-field-error {
   margin: 0;
   color: #b91c1c;
